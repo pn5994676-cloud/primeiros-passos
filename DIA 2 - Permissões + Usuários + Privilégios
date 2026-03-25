@@ -1,0 +1,88 @@
+parte 1 como funciona as permissões
+(ls -l)
+vai aparecer algo assim:
+-rw-r--r-- 1 user user arquivo.txt
+isso significa:
+parte                significado
+-                    tipo de arquivo
+rw-                  dono pode ler/escrever
+r--                  grupo só lê
+r--                  outros so leem
+tradução simples:
+r = read (ler)
+w = Write (escrever)
+x = executar
+
+parte 2 Mudando as permissões
+touch teste.sh
+ls -l
+
+agora de permissão total:
+chmod 777 teste.sh
+ls -l
+agora todo mundo pode fazer tudo (perigoso)
+
+chmod 000 teste.sh
+agora ninguem pode acessar
+
+parte 3 o que é privilegio
+No linux existem niveis:
+Usuário comum
+Root (admin)
+
+digite:
+whoami
+
+depois:
+sudo whoami
+
+se aparecer root, voce subiu de nivel
+
+isso e muito importante
+grande parte dos ataques é
+entrar como usuario comum
+virar root (privilege escalation)
+
+missão 2 (nivel iniciante real)
+faça isso:
+crie uma pasta:
+
+mkdir laboratorio
+cd laboratorio
+
+crie 3 arquivos:
+
+touch publico.txt privado.txt secreto.txt
+
+configure permissões:
+publico -> todos podem acessar
+privado -> só você
+secreto -> ninguém
+use chmod para isso
+
+teste:
+ls -l
+
+Os valores do chmod no Linux são definidos por um sistema octal (base 8), onde cada número representa uma combinação de permissões para usuário, grupo e outros: 4 (leitura/r), 2 (escrita/w) e 1 (execução/x). A soma desses valores cria as permissões: 7 (rwx - total), 6 (rw-), 5 (r-x), 4 (r--). 
+Guia Linux
+Guia Linux
+ +4
+Valores Octais do Chmod
+As permissões são compostas por três dígitos (ex: 755), representando Dono, Grupo e Outros: 
+7: Leitura, Escrita e Execução (
+
+
+).
+6: Leitura e Escrita (
+
+).
+5: Leitura e Execução (
+
+).
+4: Apenas Leitura.
+3: Escrita e Execução (
+
+).
+2: Apenas Escrita.
+1: Apenas Execução.
+0: Nenhuma permissão
