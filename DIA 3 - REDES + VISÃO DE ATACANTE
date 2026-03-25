@@ -1,0 +1,448 @@
+Isso aqui é exatamente o que um Red Team usa pra:
+
+explorar arquivos mal configurados
+escalar privilégios
+encontrar falhas reais
+
+Agora vamos subir de nível.
+
+⚔️ DIA 3 — Redes + visão de atacante
+
+Hoje você vai aprender:
+
+Como máquinas se comunicam
+Como descobrir alvos
+Primeira varredura real
+🌐 PARTE 1 — Entendendo IP (identidade da máquina)
+
+Digite no Kali:
+
+ip a
+
+👉 Você vai ver algo tipo: O endereço de ip e o endereço da maquina 
+
+192.168.x.x
+
+Esse é o seu IP na rede.
+
+🧠 Conceito chave:
+IP = endereço da máquina
+Rede = várias máquinas conectadas
+
+👉 Um atacante SEMPRE começa descobrindo isso
+
+🚪 PARTE 2 — Portas (onde os serviços vivem): portas sao protocolos de serviços onde os serviços vivem 
+
+Exemplo:
+
+80 → site (HTTP)
+22 → SSH (acesso remoto)
+443 → HTTPS
+
+👉 Se a porta está aberta = possível entrada
+
+🔍 PARTE 3 — Primeira varredura (modo atacante) o nmap escaneias endereços de ip e verificam se existem portas abertas para invasões
+
+Vamos usar:
+👉 Nmap
+
+🎯 Descubra sua rede
+
+Digite:
+
+ip route
+
+Vai aparecer algo como:
+
+192.168.0.0/24
+
+👉 Essa é sua rede
+
+🔥 Agora escaneie:
+nmap -sn 192.168.0.0/24
+
+👉 Isso mostra quais máquinas estão vivas
+
+🧠 O que você está fazendo:
+
+Você está literalmente:
+👉 descobrindo alvos na rede
+
+🧪 MISSÃO 3
+🎯 Objetivo: encontrar máquinas
+
+Faça isso:
+
+Descubra sua rede (ip route)
+Rode o scan (nmap -sn SUA_REDE)
+Anote:
+Quantos IPs apareceram
+Qual é o seu IP
+🔥 MISSÃO EXTRA (nível hacker)
+
+Escolha um IP que apareceu e rode:
+
+nmap -sV IP_AQUI
+
+👉 Isso tenta descobrir serviços rodando
+
+🧠 Mentalidade importante
+
+Você acabou de fazer a fase 1 de um ataque real:
+
+Reconhecimento ✅
+Descoberta de alvos ✅
+
+
+
+
+
+
+
+┌──(kali㉿kali)-[~]
+└─$ ip route
+192.168.56.0/24 dev eth0 proto kernel scope link src 192.168.56.102 metric 100 
+                                                                             
+┌──(kali㉿kali)-[~]
+└─$ nmap -sn 192.168.0.0/24    
+Starting Nmap 7.95 ( https://nmap.org ) at 2026-03-25 08:09 EDT
+setup_target: failed to determine route to 192.168.0.0
+setup_target: failed to determine route to 192.168.0.1
+setup_target: failed to determine route to 192.168.0.2
+setup_target: failed to determine route to 192.168.0.3
+setup_target: failed to determine route to 192.168.0.4
+setup_target: failed to determine route to 192.168.0.5
+setup_target: failed to determine route to 192.168.0.6
+setup_target: failed to determine route to 192.168.0.7
+setup_target: failed to determine route to 192.168.0.8
+setup_target: failed to determine route to 192.168.0.9
+setup_target: failed to determine route to 192.168.0.10
+setup_target: failed to determine route to 192.168.0.11
+setup_target: failed to determine route to 192.168.0.12
+setup_target: failed to determine route to 192.168.0.13
+setup_target: failed to determine route to 192.168.0.14
+setup_target: failed to determine route to 192.168.0.15
+setup_target: failed to determine route to 192.168.0.16
+setup_target: failed to determine route to 192.168.0.17
+setup_target: failed to determine route to 192.168.0.18
+setup_target: failed to determine route to 192.168.0.19
+setup_target: failed to determine route to 192.168.0.20
+setup_target: failed to determine route to 192.168.0.21
+setup_target: failed to determine route to 192.168.0.22
+setup_target: failed to determine route to 192.168.0.23
+setup_target: failed to determine route to 192.168.0.24
+setup_target: failed to determine route to 192.168.0.25
+setup_target: failed to determine route to 192.168.0.26
+setup_target: failed to determine route to 192.168.0.27
+setup_target: failed to determine route to 192.168.0.28
+setup_target: failed to determine route to 192.168.0.29
+setup_target: failed to determine route to 192.168.0.30
+setup_target: failed to determine route to 192.168.0.31
+setup_target: failed to determine route to 192.168.0.32
+setup_target: failed to determine route to 192.168.0.33
+setup_target: failed to determine route to 192.168.0.34
+setup_target: failed to determine route to 192.168.0.35
+setup_target: failed to determine route to 192.168.0.36
+setup_target: failed to determine route to 192.168.0.37
+setup_target: failed to determine route to 192.168.0.38
+setup_target: failed to determine route to 192.168.0.39
+setup_target: failed to determine route to 192.168.0.40
+setup_target: failed to determine route to 192.168.0.41
+setup_target: failed to determine route to 192.168.0.42
+setup_target: failed to determine route to 192.168.0.43
+setup_target: failed to determine route to 192.168.0.44
+setup_target: failed to determine route to 192.168.0.45
+setup_target: failed to determine route to 192.168.0.46
+setup_target: failed to determine route to 192.168.0.47
+setup_target: failed to determine route to 192.168.0.48
+setup_target: failed to determine route to 192.168.0.49
+setup_target: failed to determine route to 192.168.0.50
+setup_target: failed to determine route to 192.168.0.51
+setup_target: failed to determine route to 192.168.0.52
+setup_target: failed to determine route to 192.168.0.53
+setup_target: failed to determine route to 192.168.0.54
+setup_target: failed to determine route to 192.168.0.55
+setup_target: failed to determine route to 192.168.0.56
+setup_target: failed to determine route to 192.168.0.57
+setup_target: failed to determine route to 192.168.0.58
+setup_target: failed to determine route to 192.168.0.59
+setup_target: failed to determine route to 192.168.0.60
+setup_target: failed to determine route to 192.168.0.61
+setup_target: failed to determine route to 192.168.0.62
+setup_target: failed to determine route to 192.168.0.63
+setup_target: failed to determine route to 192.168.0.64
+setup_target: failed to determine route to 192.168.0.65
+setup_target: failed to determine route to 192.168.0.66
+setup_target: failed to determine route to 192.168.0.67
+setup_target: failed to determine route to 192.168.0.68
+setup_target: failed to determine route to 192.168.0.69
+setup_target: failed to determine route to 192.168.0.70
+setup_target: failed to determine route to 192.168.0.71
+setup_target: failed to determine route to 192.168.0.72
+setup_target: failed to determine route to 192.168.0.73
+setup_target: failed to determine route to 192.168.0.74
+setup_target: failed to determine route to 192.168.0.75
+setup_target: failed to determine route to 192.168.0.76
+setup_target: failed to determine route to 192.168.0.77
+setup_target: failed to determine route to 192.168.0.78
+setup_target: failed to determine route to 192.168.0.79
+setup_target: failed to determine route to 192.168.0.80
+setup_target: failed to determine route to 192.168.0.81
+setup_target: failed to determine route to 192.168.0.82
+setup_target: failed to determine route to 192.168.0.83
+setup_target: failed to determine route to 192.168.0.84
+setup_target: failed to determine route to 192.168.0.85
+setup_target: failed to determine route to 192.168.0.86
+setup_target: failed to determine route to 192.168.0.87
+setup_target: failed to determine route to 192.168.0.88
+setup_target: failed to determine route to 192.168.0.89
+setup_target: failed to determine route to 192.168.0.90
+setup_target: failed to determine route to 192.168.0.91
+setup_target: failed to determine route to 192.168.0.92
+setup_target: failed to determine route to 192.168.0.93
+setup_target: failed to determine route to 192.168.0.94
+setup_target: failed to determine route to 192.168.0.95
+setup_target: failed to determine route to 192.168.0.96
+setup_target: failed to determine route to 192.168.0.97
+setup_target: failed to determine route to 192.168.0.98
+setup_target: failed to determine route to 192.168.0.99
+setup_target: failed to determine route to 192.168.0.100
+setup_target: failed to determine route to 192.168.0.101
+setup_target: failed to determine route to 192.168.0.102
+setup_target: failed to determine route to 192.168.0.103
+setup_target: failed to determine route to 192.168.0.104
+setup_target: failed to determine route to 192.168.0.105
+setup_target: failed to determine route to 192.168.0.106
+setup_target: failed to determine route to 192.168.0.107
+setup_target: failed to determine route to 192.168.0.108
+setup_target: failed to determine route to 192.168.0.109
+setup_target: failed to determine route to 192.168.0.110
+setup_target: failed to determine route to 192.168.0.111
+setup_target: failed to determine route to 192.168.0.112
+setup_target: failed to determine route to 192.168.0.113
+setup_target: failed to determine route to 192.168.0.114
+setup_target: failed to determine route to 192.168.0.115
+setup_target: failed to determine route to 192.168.0.116
+setup_target: failed to determine route to 192.168.0.117
+setup_target: failed to determine route to 192.168.0.118
+setup_target: failed to determine route to 192.168.0.119
+setup_target: failed to determine route to 192.168.0.120
+setup_target: failed to determine route to 192.168.0.121
+setup_target: failed to determine route to 192.168.0.122
+setup_target: failed to determine route to 192.168.0.123
+setup_target: failed to determine route to 192.168.0.124
+setup_target: failed to determine route to 192.168.0.125
+setup_target: failed to determine route to 192.168.0.126
+setup_target: failed to determine route to 192.168.0.127
+setup_target: failed to determine route to 192.168.0.128
+setup_target: failed to determine route to 192.168.0.129
+setup_target: failed to determine route to 192.168.0.130
+setup_target: failed to determine route to 192.168.0.131
+setup_target: failed to determine route to 192.168.0.132
+setup_target: failed to determine route to 192.168.0.133
+setup_target: failed to determine route to 192.168.0.134
+setup_target: failed to determine route to 192.168.0.135
+setup_target: failed to determine route to 192.168.0.136
+setup_target: failed to determine route to 192.168.0.137
+setup_target: failed to determine route to 192.168.0.138
+setup_target: failed to determine route to 192.168.0.139
+setup_target: failed to determine route to 192.168.0.140
+setup_target: failed to determine route to 192.168.0.141
+setup_target: failed to determine route to 192.168.0.142
+setup_target: failed to determine route to 192.168.0.143
+setup_target: failed to determine route to 192.168.0.144
+setup_target: failed to determine route to 192.168.0.145
+setup_target: failed to determine route to 192.168.0.146
+setup_target: failed to determine route to 192.168.0.147
+setup_target: failed to determine route to 192.168.0.148
+setup_target: failed to determine route to 192.168.0.149
+setup_target: failed to determine route to 192.168.0.150
+setup_target: failed to determine route to 192.168.0.151
+setup_target: failed to determine route to 192.168.0.152
+setup_target: failed to determine route to 192.168.0.153
+setup_target: failed to determine route to 192.168.0.154
+setup_target: failed to determine route to 192.168.0.155
+setup_target: failed to determine route to 192.168.0.156
+setup_target: failed to determine route to 192.168.0.157
+setup_target: failed to determine route to 192.168.0.158
+setup_target: failed to determine route to 192.168.0.159
+setup_target: failed to determine route to 192.168.0.160
+setup_target: failed to determine route to 192.168.0.161
+setup_target: failed to determine route to 192.168.0.162
+setup_target: failed to determine route to 192.168.0.163
+setup_target: failed to determine route to 192.168.0.164
+setup_target: failed to determine route to 192.168.0.165
+setup_target: failed to determine route to 192.168.0.166
+setup_target: failed to determine route to 192.168.0.167
+setup_target: failed to determine route to 192.168.0.168
+setup_target: failed to determine route to 192.168.0.169
+setup_target: failed to determine route to 192.168.0.170
+setup_target: failed to determine route to 192.168.0.171
+setup_target: failed to determine route to 192.168.0.172
+setup_target: failed to determine route to 192.168.0.173
+setup_target: failed to determine route to 192.168.0.174
+setup_target: failed to determine route to 192.168.0.175
+setup_target: failed to determine route to 192.168.0.176
+setup_target: failed to determine route to 192.168.0.177
+setup_target: failed to determine route to 192.168.0.178
+setup_target: failed to determine route to 192.168.0.179
+setup_target: failed to determine route to 192.168.0.180
+setup_target: failed to determine route to 192.168.0.181
+setup_target: failed to determine route to 192.168.0.182
+setup_target: failed to determine route to 192.168.0.183
+setup_target: failed to determine route to 192.168.0.184
+setup_target: failed to determine route to 192.168.0.185
+setup_target: failed to determine route to 192.168.0.186
+setup_target: failed to determine route to 192.168.0.187
+setup_target: failed to determine route to 192.168.0.188
+setup_target: failed to determine route to 192.168.0.189
+setup_target: failed to determine route to 192.168.0.190
+setup_target: failed to determine route to 192.168.0.191
+setup_target: failed to determine route to 192.168.0.192
+setup_target: failed to determine route to 192.168.0.193
+setup_target: failed to determine route to 192.168.0.194
+setup_target: failed to determine route to 192.168.0.195
+setup_target: failed to determine route to 192.168.0.196
+setup_target: failed to determine route to 192.168.0.197
+setup_target: failed to determine route to 192.168.0.198
+setup_target: failed to determine route to 192.168.0.199
+setup_target: failed to determine route to 192.168.0.200
+setup_target: failed to determine route to 192.168.0.201
+setup_target: failed to determine route to 192.168.0.202
+setup_target: failed to determine route to 192.168.0.203
+setup_target: failed to determine route to 192.168.0.204
+setup_target: failed to determine route to 192.168.0.205
+setup_target: failed to determine route to 192.168.0.206
+setup_target: failed to determine route to 192.168.0.207
+setup_target: failed to determine route to 192.168.0.208
+setup_target: failed to determine route to 192.168.0.209
+setup_target: failed to determine route to 192.168.0.210
+setup_target: failed to determine route to 192.168.0.211
+setup_target: failed to determine route to 192.168.0.212
+setup_target: failed to determine route to 192.168.0.213
+setup_target: failed to determine route to 192.168.0.214
+setup_target: failed to determine route to 192.168.0.215
+setup_target: failed to determine route to 192.168.0.216
+setup_target: failed to determine route to 192.168.0.217
+setup_target: failed to determine route to 192.168.0.218
+setup_target: failed to determine route to 192.168.0.219
+setup_target: failed to determine route to 192.168.0.220
+setup_target: failed to determine route to 192.168.0.221
+setup_target: failed to determine route to 192.168.0.222
+setup_target: failed to determine route to 192.168.0.223
+setup_target: failed to determine route to 192.168.0.224
+setup_target: failed to determine route to 192.168.0.225
+setup_target: failed to determine route to 192.168.0.226
+setup_target: failed to determine route to 192.168.0.227
+setup_target: failed to determine route to 192.168.0.228
+setup_target: failed to determine route to 192.168.0.229
+setup_target: failed to determine route to 192.168.0.230
+setup_target: failed to determine route to 192.168.0.231
+setup_target: failed to determine route to 192.168.0.232
+setup_target: failed to determine route to 192.168.0.233
+setup_target: failed to determine route to 192.168.0.234
+setup_target: failed to determine route to 192.168.0.235
+setup_target: failed to determine route to 192.168.0.236
+setup_target: failed to determine route to 192.168.0.237
+setup_target: failed to determine route to 192.168.0.238
+setup_target: failed to determine route to 192.168.0.239
+setup_target: failed to determine route to 192.168.0.240
+setup_target: failed to determine route to 192.168.0.241
+setup_target: failed to determine route to 192.168.0.242
+setup_target: failed to determine route to 192.168.0.243
+setup_target: failed to determine route to 192.168.0.244
+setup_target: failed to determine route to 192.168.0.245
+setup_target: failed to determine route to 192.168.0.246
+setup_target: failed to determine route to 192.168.0.247
+setup_target: failed to determine route to 192.168.0.248
+setup_target: failed to determine route to 192.168.0.249
+setup_target: failed to determine route to 192.168.0.250
+setup_target: failed to determine route to 192.168.0.251
+setup_target: failed to determine route to 192.168.0.252
+setup_target: failed to determine route to 192.168.0.253
+setup_target: failed to determine route to 192.168.0.254
+setup_target: failed to determine route to 192.168.0.255
+WARNING: No targets were specified, so 0 hosts scanned.
+Nmap done: 0 IP addresses (0 hosts up) scanned in 0.01 seconds
+
+Boa — você fez tudo certo, mas caiu num erro clássico de iniciante (isso é ótimo, porque agora você sobe de nível de verdade).
+
+⚠️ O que aconteceu (importante)
+
+Você descobriu sua rede corretamente:
+
+192.168.56.0/24
+
+👉 MAS você escaneou outra rede:
+
+192.168.0.0/24 ❌
+
+Por isso o erro:
+
+failed to determine route
+🧠 Tradução (mentalidade hacker)
+
+Seu Kali está aqui:
+
+192.168.56.102
+
+👉 Então ele só consegue “ver”:
+
+192.168.56.X
+
+👉 NÃO:
+
+192.168.0.X
+✅ COMO CORRIGIR (faça agora)
+
+Rode o comando certo:
+
+nmap -sn 192.168.56.0/24
+🎯 O que deve acontecer
+
+Agora você vai ver algo tipo:
+
+Nmap scan report for 192.168.56.1
+Nmap scan report for 192.168.56.102
+
+👉 Provavelmente:
+
+1 = gateway
+102 = você (Kali)
+⚠️ SOBRE OS “255 IPs”
+
+Você NÃO encontrou 255 máquinas.
+
+👉 Você tentou escanear 255 endereços possíveis
+👉 Mas nenhuma respondeu
+
+🧪 MISSÃO 3 — CORREÇÃO
+
+Faça isso:
+
+Rode o scan correto:
+nmap -sn 192.168.56.0/24
+Me diga:
+Quantos hosts apareceram
+Qual é o seu IP
+Se apareceu mais alguma máquina além do Kali
+🔥 MISSÃO EXTRA (IMPORTANTE)
+
+Se aparecer outro IP, rode:
+
+nmap -sV IP_AQUI
+🧠 LIÇÃO DE HOJE (nível profissional)
+
+Você acabou de aprender algo MUITO importante:
+
+👉 Reconhecimento depende de contexto de rede
+
+Erro comum:
+
+Rodar ferramenta certa ❌
+No alvo errado ❌
+
+Profissional:
+
+Entende o ambiente ✅
+Depois usa ferramenta ✅
