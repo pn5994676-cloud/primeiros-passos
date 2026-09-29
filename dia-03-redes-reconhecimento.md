@@ -95,13 +95,13 @@ nmap -sV 192.168.56.1
 
 ### ❌ O erro que eu cometi
 
-Descobri minha rede corretamente (`192.168.56.0/24`), mas **escaneie uma rede diferente**:
+Descobri minha rede corretamente (`192.168.56.0/24`), mas **escaneiei uma rede diferente**:
 
 ```bash
 nmap -sn 192.168.0.0/24     # ❌ ERRO — rede errada
 ```
 
-Resultado: **255 falhas** seguidas de `setup_target: failed to determine route to 192.168.0.X`, e no final:
+Resultado: **256 falhas** seguidas de `setup_target: failed to determine route to 192.168.0.X`, e no final:
 
 ```
 WARNING: No targets were specified, so 0 hosts scanned.
@@ -131,7 +131,7 @@ Nmap done: 0 IP addresses (0 hosts up) scanned in 0.01 seconds
 | Rede que eu escaneei | `192.168.0.0/24` ❌ |
 | Meu IP | `192.168.56.102` |
 
-**O Kali só consegue "ver" `192.168.56.X`.** Como ele não tem rota para `192.168.0.X`, o Nmap não conseguiu montar nenhum alvo — daí as 255 falhas de rota.
+**O Kali só consegue "ver" `192.168.56.X`.** Como ele não tem rota para `192.168.0.X`, o Nmap não conseguiu montar nenhum alvo — daí as 256 falhas de rota.
 
 ### ✅ A correção
 
@@ -155,7 +155,7 @@ Interpretação:
 
 ### ⚠️ Sobre os "255 IPs"
 
-Eu **não** encontrei 255 máquinas. Eu **tentei** 255 endereços possíveis e **nenhum respondeu**. A diferença é enorme:
+Eu **não** encontrei 255 máquinas. Eu **tentei** 256 endereços possíveis e **nenhum respondeu**. A diferença é enorme:
 
 - `/24` = 256 endereços **possíveis**
 - Hosts **vivos** = só os que responderam (2, no caso)
