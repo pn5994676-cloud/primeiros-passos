@@ -1,0 +1,38 @@
+# Stack opcional de alvos web do laboratório.
+#
+# Regra de ouro: TODO bind é em 127.0.0.1.
+# Estes alvos são vulneráveis de propósito — nunca publicar em 0.0.0.0,
+# nunca rodar com --privileged, nunca montar o socket do Docker aqui dentro.
+#
+# Uso:
+#   docker compose up -d
+#   docker compose ps
+#   docker compose down --volumes   # reset completo
+#
+# RAM: juice-shop ~300 MB, dvwa ~400 MB. Não subir junto com as VMs (host de 8 GB).
+
+services:
+  juice-shop:
+    image: bkimminich/juice-shop:latest
+    container_name: lab-juice-shop
+    ports:
+      - "127.0.0.1:3000:3000"
+    restart: "no"
+    mem_limit: 512m
+    security_opt:
+      - no-new-privileges:true
+    # sem volumes: o progresso vive no container, e recriar = reset dos desafios
+
+  dvwa:
+    image: vulnerables/web-dvwa:latest
+    container_name: lab-dvwa
+    ports:
+      - "127.0.0.1:8081:80"
+    restart: "no"
+    mem_limit: 512m
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      - MYSQL_PASS=p@ssw0rd
+    # senha padrão do painel: admin / password
+    # na primeira visita: Create/Reset Database, depois Security Level = low
