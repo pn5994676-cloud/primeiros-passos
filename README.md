@@ -53,11 +53,36 @@ Python, SQL, análise de dados e machine learning. Roadmap completo em **[`cienc
 
 ---
 
+## 🧪 Laboratório de treino
+
+O que sustenta a trilha de cibersegurança: um lab **local e isolado**, montado na minha própria máquina, com alvos que eu mesmo subi. Nenhum alvo real, nenhum sistema de terceiros.
+
+| Alvo | Tecnologia | Serve para treinar |
+|---|---|---|
+| **Kali Linux** | VM VirtualBox | máquina atacante |
+| **Metasploitable 2** | VM VirtualBox | recon, enumeração, exploração de serviços e pós-exploração |
+| **OWASP Juice Shop** | container Docker | falhas de aplicação (OWASP Top 10) |
+
+Rede das VMs: **interna isolada**, sem bridge para a rede doméstica. Alvos web com bind **apenas em `127.0.0.1`**.
+
+📄 **[Documentação completa do lab → `lab/`](lab/README.md)**
+
+| Arquivo | Conteúdo |
+|---|---|
+| [Arquitetura e regras](lab/README.md) | diagrama, modos de rede, regras de isolamento, checklist de sessão |
+| [Instalação no VirtualBox](lab/01-instalacao-virtualbox.md) | Kali + Metasploitable 2, rede interna, snapshot `limpo`, troubleshooting |
+| [Juice Shop no Docker](lab/02-juice-shop-docker.md) | subir, resetar, jogar, capturar tráfego, Blue Team |
+| [Roteiro de treino](lab/03-roteiro-treino.md) | 4 fases com critério de conclusão: fundamentos → recon → exploração → relatório |
+
+Princípio do lab: **snapshot revertido antes e depois de cada sessão**, e **evidência sempre no host** — o alvo é descartável, o que ele prova não é.
+
+---
+
 ## 🧰 Ambiente
 
 | Item | Detalhe |
 |---|---|
-| Cibersegurança | Kali Linux em laboratório isolado / rede *host-only* (`192.168.56.0/24`) |
+| Cibersegurança | Kali Linux + Metasploitable 2 (VirtualBox) e Juice Shop (Docker), em laboratório isolado / rede interna |
 | Ciência de Dados | Python 3, Jupyter / Google Colab, VS Code |
 
 Na trilha de cibersegurança, todo teste é feito em máquina própria e isolada — nenhum alvo é real.
