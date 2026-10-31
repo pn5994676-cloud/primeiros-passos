@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aula 01 — O que é uma rede, um pacote e um endereço IP</title>
+<style>
+  :root{
+    --bg:#0b1020; --panel:#121a2e; --panel2:#0f1626; --line:#22304d;
+    --txt:#e6ecf7; --muted:#93a2c0; --accent:#38e0a0; --accent2:#4ea8ff;
+    --warn:#ffb454; --danger:#ff6b6b; --code:#0a0f1c;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:radial-gradient(900px 500px at 15% -10%, #16224a 0%, transparent 60%),
+    radial-gradient(700px 400px at 100% 0%, #10322b 0%, transparent 55%), var(--bg);
+    color:var(--txt); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.62; padding:32px 18px 80px;
+  }
+  .wrap{max-width:900px;margin:0 auto}
+  header{border-bottom:1px solid var(--line);padding-bottom:22px;margin-bottom:30px}
+  .kicker{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:700}
+  h1{font-size:31px;line-height:1.25;margin:10px 0 8px;letter-spacing:-.02em}
+  h1 span{color:var(--accent)}
+  .sub{color:var(--muted);font-size:15px;margin:0}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+  .chip{font-size:12px;padding:5px 11px;border-radius:999px;border:1px solid var(--line);
+    background:var(--panel2);color:var(--muted)}
+  .chip b{color:var(--txt);font-weight:600}
+  section{background:var(--panel);border:1px solid var(--line);border-radius:14px;
+    padding:22px 24px;margin:0 0 18px}
+  section h2{font-size:19px;margin:0 0 4px;letter-spacing:-.01em;display:flex;gap:10px;align-items:baseline}
+  .num{font-size:12px;font-weight:800;color:var(--bg);background:var(--accent);
+    border-radius:7px;padding:2px 8px;letter-spacing:.04em;flex:0 0 auto}
+  .goal{color:var(--muted);font-size:14px;margin:0 0 16px 0}
+  h3{font-size:15px;margin:20px 0 8px;color:var(--accent2);letter-spacing:.01em}
+  p{margin:0 0 12px}
+  ul,ol{margin:0 0 12px;padding-left:22px}
+  li{margin-bottom:7px}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;
+    background:#1b2743;color:#bfe3ff;padding:1.5px 6px;border-radius:5px}
+  pre{background:var(--code);border:1px solid var(--line);border-radius:10px;
+    padding:14px 16px;overflow-x:auto;margin:0 0 12px}
+  pre code{background:none;color:#cfe6ff;padding:0;font-size:12.6px;line-height:1.65;display:block;white-space:pre}
+  .c-cm{color:#5f7396}
+  .c-ok{color:var(--accent)}
+  .c-hi{color:var(--warn)}
+  .box{border-left:3px solid var(--accent);background:#0e211c;padding:12px 16px;
+    border-radius:0 10px 10px 0;margin:0 0 14px;font-size:14.5px}
+  .box.warn{border-color:var(--warn);background:#241d0f}
+  .box.danger{border-color:var(--danger);background:#241214}
+  .box.blue{border-color:var(--accent2);background:#0e1a2b}
+  .box p:last-child{margin:0}
+  .lbl{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
+    display:block;margin-bottom:6px;color:var(--muted)}
+  table{width:100%;border-collapse:collapse;font-size:14px;margin:0 0 14px}
+  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  td code{font-size:12.5px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:700px){.grid2{grid-template-columns:1fr}}
+  .card{background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:15px 17px}
+  .card h4{margin:0 0 8px;font-size:14px}
+  .atk h4{color:var(--danger)}
+  .def h4{color:var(--accent)}
+  details{background:var(--panel2);border:1px solid var(--line);border-radius:10px;
+    padding:12px 16px;margin-bottom:10px}
+  summary{cursor:pointer;font-weight:600;font-size:14.5px;color:var(--txt)}
+  summary::marker{color:var(--accent)}
+  details[open] summary{margin-bottom:10px;color:var(--accent)}
+  details p:last-child{margin:0}
+  .bin{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.6px;letter-spacing:.02em}
+  .pipe{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:0 0 14px;font-size:13px}
+  .pipe .stage{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:8px 11px}
+  .pipe .stage b{color:var(--accent);display:block;font-size:12.5px}
+  .pipe .stage span{color:var(--muted);font-size:11.5px}
+  .pipe .arw{color:var(--muted)}
+  .mod{display:flex;gap:12px;padding:10px 0;border-bottom:1px dashed var(--line);font-size:14px}
+  .mod:last-child{border-bottom:0}
+  .mod .w{flex:0 0 62px;color:var(--accent);font-weight:700;font-size:12.5px}
+  .mod .t{flex:1}
+  .mod .t b{display:block}
+  .mod .t span{color:var(--muted);font-size:12.8px}
+  footer{color:var(--muted);font-size:12.5px;text-align:center;margin-top:26px;line-height:1.8}
+  .metrics{display:flex;flex-wrap:wrap;gap:12px;margin-top:6px}
+  .metric{flex:1 1 150px;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+  .metric b{display:block;font-size:22px;color:var(--accent);letter-spacing:-.02em}
+  .metric span{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">Tutor de Redes para Cibersegurança · Módulo 01</div>
+  <h1>O que é uma rede, um <span>pacote</span> e um endereço IP</h1>
+  <p class="sub">Aula de abertura — do zero absoluto, sem nenhuma sigla sem tradução. Objetivo declarado: pentest.</p>
+  <div class="chips">
+    <div class="chip">Nível <b>zero absoluto</b></div>
+    <div class="chip">Modo <b>explicação</b></div>
+    <div class="chip">Objetivo <b>pentest</b></div>
+    <div class="chip">Ritmo <b>2h/semana</b></div>
+    <div class="chip">Trilha <b>15 módulos</b></div>
+  </div>
+</header>
+
+<section>
+  <h2><span class="num">1</span> Ideia em uma frase</h2>
+  <p><b>Rede é um acordo:</b> duas ou mais máquinas conseguem trocar pequenos blocos de dados — os <b>pacotes</b> — porque todas falam o mesmo conjunto de regras, e cada uma tem um endereço que a identifica nessa conversa.</p>
+  <p class="goal">Se você guardar só isso hoje, já valeu a aula. Todo o resto (IP, subnet, ARP, DNS, VLAN, firewall) é detalhe de <i>como</i> esse acordo é cumprido — e, para você, de <i>onde</i> ele pode ser quebrado.</p>
+</section>
+
+<section>
+  <h2><span class="num">2</span> Analogia do mundo real</h2>
+  <p>Imagine que você quer mandar uma carta para alguém, mas a carta é grande demais para o caminhão levar de uma vez. Então você:</p>
+  <ol>
+    <li><b>corta</b> a carta em vários pedaços numerados;</li>
+    <li><b>escreve</b> em cada pedaço quem enviou, para quem vai e qual a posição daquele pedaço;</li>
+    <li><b>põe</b> cada pedaço num envelope;</li>
+    <li>entrega no <b>correio</b>, que decide a rota até a casa de destino.</li>
+  </ol>
+  <p>Os pedaços são <b>pacotes</b>. O que você escreve neles é o <b>cabeçalho</b> (header). O correio é o <b>roteador</b>. E os Correios não prometem que todos os pedaços chegam na ordem — só que vão tentar entregar. Se faltar um, você pede só aquele de novo.</p>
+  <div class="box blue">
+    <span class="lbl">Por que isso importa para pentest</span>
+    <p>Quase todo ataque de rede é uma variação de dois movimentos: <b>falsificar o que está escrito no cabeçalho</b> (para o destinatário achar que o pacote veio de alguém confiável) ou <b>ler o pacote de outra pessoa no caminho</b>. Se você entende o cabeçalho, entende o ataque.</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">3</span> Como funciona por dentro</h2>
+  <p class="goal">Aqui vamos do zero: o que realmente sai do cabo quando você aperta Enter num <code>ping</code>.</p>
+
+  <h3>Passo 1 — Tudo que trafega são bits, agrupados em pacotes</h3>
+  <p>Um <b>pacote</b> é um pedaço de dados com um endereço de origem, um endereço de destino e um "número de série". Nada mais. Um arquivo de 5 MB não viaja inteiro: ele é fatiado em milhares de pacotes, e cada um pode ir por um caminho diferente até o destino.</p>
+
+  <h3>Passo 2 — Encapsulamento: o pacote dentro do pacote</h3>
+  <p>Cada camada embrulha o que a camada de cima entregou, como bonecas russas. Isso se chama <b>encapsulamento</b>. A analogia do envelope dentro de outro envelope:</p>
+  <div class="pipe">
+    <div class="stage"><b>Seus dados</b><span>"olá" (payload)</span></div>
+    <div class="arw">→</div>
+    <div class="stage"><b>+ TCP/UDP</b><span>porta de origem/destino</span></div>
+    <div class="arw">→</div>
+    <div class="stage"><b>+ IP</b><span>IP de origem/destino</span></div>
+    <div class="arw">→</div>
+    <div class="stage"><b>+ Ethernet</b><span>MAC origem/destino</span></div>
+    <div class="arw">→</div>
+    <div class="stage"><b>= bits no cabo</b><span>o quadro</span></div>
+  </div>
+  <p>Os nomes dos "pacotes" mudam conforme a camada — e isso é cobrado em qualquer certificação:</p>
+  <table>
+    <thead><tr><th>Camada</th><th>Nome da unidade (PDU)</th><th>Endereço usado</th><th>Tamanho típico do cabeçalho</th></tr></thead>
+    <tbody>
+      <tr><td>Aplicação</td><td>dados</td><td>—</td><td>—</td></tr>
+      <tr><td>Transporte</td><td><b>segmento</b> (TCP) / <b>datagrama</b> (UDP)</td><td>porta</td><td>TCP: 20 bytes · UDP: 8 bytes</td></tr>
+      <tr><td>Rede</td><td><b>pacote</b></td><td>IP</td><td>20 bytes (IPv4)</td></tr>
+      <tr><td>Enlace</td><td><b>quadro</b> (frame)</td><td>MAC</td><td>14 bytes + 4 de trailer (FCS)</td></tr>
+      <tr><td>Física</td><td>bits</td><td>—</td><td>—</td></tr>
+    </tbody>
+  </table>
+  <p>Some tudo num <code>ping</code> pequeno: 20 (IP) + 8 (ICMP) + 32 (payload padrão do Windows) = <b>60 bytes</b> de IP, mais 18 de Ethernet = <b>78 bytes</b> no cabo. Um comando triviais gera dezenas de bytes de "burocracia" — é disso que se alimenta a análise de tráfego.</p>
+
+  <h3>Passo 3 — O endereço IP identifica a máquina, o MAC identifica a placa</h3>
+  <p>Aqui está a distinção que separa quem entende redes de quem decora:</p>
+  <ul>
+    <li><b>IP</b> (ex.: <code>192.168.1.37</code>) é o endereço lógico. Vale de ponta a ponta, muda quando você troca de rede. É o "endereço da casa".</li>
+    <li><b>MAC</b> (ex.: <code>3c:52:82:1a:9f:04</code>) é o endereço físico, gravado na placa. Vale só dentro do seu segmento local. É o "nome do morador".</li>
+  </ul>
+  <p>Por isso existe o <b>ARP</b> (Address Resolution Protocol, "protocolo de resolução de endereço"): sua máquina pergunta em voz alta na rede local <i>"quem tem o IP 192.168.1.1? Me diga seu MAC"</i> e guarda a resposta numa tabela. Esse é o Módulo 04 da sua trilha — e um dos pontos mais atacados de qualquer rede interna.</p>
+
+  <h3>Passo 4 — O que é um endereço privado e o que é a internet</h3>
+  <p>Sua casa não tem um endereço IP público por dispositivo. O roteador tem <b>um</b> endereço público e distribui endereços <b>privados</b> internamente (faixas reservadas: <code>192.168.x.x</code>, <code>10.x.x.x</code>, <code>172.16–31.x.x</code>). Quando o pacote sai, o roteador troca o endereço privado pelo público. Esse truque se chama <b>NAT</b> (Network Address Translation, "tradução de endereço de rede") — Módulo 13.</p>
+  <div class="box">
+    <p><b>Consequência de segurança imediata:</b> um IP privado <i>não é alcançável</i> da internet por si só. Todo pentest externo começa justamente por descobrir o que está exposto apesar disso: port forwarding esquecido, VPN mal configurada, serviço em nuvem com IP público.</p>
+  </div>
+
+  <h3>Passo 5 — LAN e WAN não são a mesma briga</h3>
+  <p><b>LAN</b> (Local Area Network, "rede local") é o seu prédio, seu escritório, seu laboratório: tudo passa por um switch e você <i>vê</i> o tráfego dos vizinhos se estiver no mesmo segmento. <b>WAN</b> (Wide Area Network, "rede ampla") é o caminho entre redes, feito por roteadores que você não controla.</p>
+  <p>Isso muda o ataque: na LAN você ataca <b>camada 2</b> (ARP, VLAN, STP). Na WAN você ataca <b>camada 3 e 4</b> (rotas, portas expostas, TLS). Um pentest interno e um externo são dois trabalhos diferentes — e você vai precisar dos dois.</p>
+
+  <h3>Passo 6 — O primeiro contato com binário (a conta feita, não de cabeça)</h3>
+  <p>Endereço IP é um número binário de 32 bits escrito em 4 grupos decimais. A máscara diz <b>quantos bits identificam a rede</b> e quantos sobram para as máquinas. Exemplo real, IP <code>192.168.1.37</code> com máscara <code>255.255.255.192</code> (prefixo <code>/26</code>):</p>
+<pre><code>IP   192.168.1.37   →  <span class="c-hi">11000000.10101000.00000001.00100101</span>
+MÁSC 255.255.255.192→  <span class="c-hi">11111111.11111111.11111111.11000000</span>
+                              └───── 26 bits de rede ─────┘└ 6 hosts ┘
+
+Rede     : 192.168.1.0     (todos os bits de host em zero)
+Broadcast: 192.168.1.63    (todos os bits de host em um)
+Hosts    : 192.168.1.1  …  192.168.1.62   →  <span class="c-ok">62 endereços utilizáveis</span>
+</code></pre>
+  <p>Não decore: <code>2^(32-26) = 2^6 = 64</code> endereços totais, menos 2 (rede e broadcast) = <b>62 hosts</b>. Essa conta é o coração do Módulo 06, e ela é a diferença entre "achei o servidor" e "achei a faixa inteira".</p>
+</section>
+
+<section>
+  <h2><span class="num">4</span> Onde você vê isso na prática</h2>
+  <p class="goal">Comandos reais e o que cada linha da saída significa. As saídas abaixo são <b>ilustrativas</b> (exemplo didático) — rode na sua máquina para ver a sua.</p>
+
+  <h3><code>ip a</code> — quem eu sou nesta rede</h3>
+<pre><code><span class="c-cm">$ ip a</span>
+2: <span class="c-ok">wlan0</span>: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 state UP
+    link/ether <span class="c-hi">3c:52:82:1a:9f:04</span> brd ff:ff:ff:ff:ff:ff   <span class="c-cm">← meu MAC</span>
+    inet <span class="c-hi">192.168.1.37/24</span> brd 192.168.1.255 scope global wlan0  <span class="c-cm">← meu IP e a máscara (/24)</span>
+       valid_lft forever preferred_lft forever</code></pre>
+  <ul>
+    <li><code>wlan0</code> = o nome da interface (no cabo seria <code>eth0</code> ou <code>enp3s0</code>).</li>
+    <li><code>state UP</code> = a placa está ativa. Se estiver <code>DOWN</code>, nada de rede funciona.</li>
+    <li><code>link/ether</code> = o MAC.</li>
+    <li><code>inet 192.168.1.37/24</code> = seu IP e o tamanho da rede. <code>/24</code> significa 254 vizinhos possíveis no mesmo segmento.</li>
+  </ul>
+  <div class="box blue">
+    <p><b>Leitura de pentest:</b> o <code>/24</code> já te diz o escopo do seu alvo interno. Um atacante olha essa linha e pensa "tenho 254 endereços para varrer". Um defensor olha e pensa "por que este notebook está num segmento de 254 máquinas?".</p>
+  </div>
+
+  <h3><code>ip r</code> — para onde eu mando o que não é meu</h3>
+<pre><code><span class="c-cm">$ ip r</span>
+default via <span class="c-hi">192.168.1.1</span> dev wlan0 proto dhcp metric 600   <span class="c-cm">← gateway: a saída para fora</span>
+192.168.1.0/24 dev wlan0 proto kernel scope link src 192.168.1.37</code></pre>
+  <p>Linha 1: "tudo que eu não souber para onde mandar, entrega para <code>192.168.1.1</code>" — o <b>gateway</b> (a sua porta de saída, normalmente o roteador). Linha 2: "a rede 192.168.1.0/24 é local, falo direto pelo cabo/wi-fi".</p>
+
+  <h3><code>ping</code> — o teste mais básico de "existe alguém aí?"</h3>
+<pre><code><span class="c-cm">$ ping -c 3 192.168.1.1</span>
+64 bytes from 192.168.1.1: icmp_seq=1 ttl=<span class="c-hi">64</span> time=<span class="c-ok">2.31 ms</span>
+64 bytes from 192.168.1.1: icmp_seq=2 ttl=64 time=2.02 ms
+64 bytes from 192.168.1.1: icmp_seq=3 ttl=64 time=1.98 ms</code></pre>
+  <ul>
+    <li><b>icmp_seq</b> = ordem dos pacotes. Se faltar número, houve perda.</li>
+    <li><b>ttl</b> = tempo de vida; cai 1 a cada roteador. <code>ttl=64</code> sugere destino Linux a poucos saltos; <code>ttl=128</code> costuma ser Windows; <code>ttl≈45–55</code> indica vários saltos ou outro sistema. É <b>pista</b>, não certeza — o TTL pode ser falsificado.</li>
+    <li><b>time</b> = ida e volta. Salto grande de repente = problema de rede ou desvio de rota.</li>
+  </ul>
+
+  <h3><code>arp -a</code> — quem já me respondeu nesta rede</h3>
+<pre><code><span class="c-cm">$ arp -a</span>
+? (192.168.1.1)   at <span class="c-hi">a4:2b:b0:11:22:33</span> [ether] on wlan0   <span class="c-cm">← o roteador</span>
+? (192.168.1.44)  at 8c:85:90:aa:bb:cc [ether] on wlan0   <span class="c-cm">← um vizinho</span></code></pre>
+  <p>Essa é a <b>tabela ARP</b>: a lista de "IP → MAC" que sua máquina aprendeu. Se um IP conhecido aparece com um MAC diferente do normal, alguém pode estar se passando por ele. Esse é o sinal clássico de ARP spoofing.</p>
+
+  <h3><code>tcpdump</code> / Wireshark — ver o pacote, não só o resultado</h3>
+<pre><code><span class="c-cm">$ sudo tcpdump -i wlan0 -n icmp</span>
+14:03:11 IP 192.168.1.37 &gt; 192.168.1.1: ICMP echo request, id 21, seq 1, length 64
+14:03:11 IP 192.168.1.1 &gt; 192.168.1.37: ICMP echo reply,   id 21, seq 1, length 64</code></pre>
+  <p>É aqui que a teoria vira intuição: dois pacotes, um de ida e um de volta, cada um com seu cabeçalho. O Wireshark faz o mesmo com interface gráfica e separa o pacote em camadas — é o laboratório do Módulo 15, mas você pode abrir hoje e só <i>olhar</i>.</p>
+  <div class="box warn">
+    <p><b>Regra de ouro legal:</b> capture tráfego apenas na sua própria rede e nos seus próprios equipamentos. Capturar tráfego de terceiros sem autorização é crime no Brasil (Lei 12.737/2012 e Lei 14.155/2021), mesmo sem extrair nada.</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">5</span> A visão do atacante</h2>
+  <p class="goal">Mecanismo e efeito — sem receita passo a passo de exploração. O objetivo é você reconhecer o padrão quando o vir.</p>
+  <div class="grid2">
+    <div class="card atk">
+      <h4>1. Falsificar o cabeçalho</h4>
+      <p>A rede confia no que está escrito no pacote. Se eu escrevo que meu IP de origem é o do gateway, a resposta pode vir para mim. Isso se chama <b>spoofing</b> (falsificação) e é a base de ARP poisoning, DNS spoofing e e-mails falsos. O efeito prático: <b>man-in-the-middle</b> — todo o tráfego da vítima passa por mim.</p>
+    </div>
+    <div class="card atk">
+      <h4>2. Escutar o que não é meu</h4>
+      <p>Em rede com hub, todos ouvem tudo. Com switch, o tráfego é separado por porta — mas isso é uma decisão de configuração, não uma lei física. <b>Sniffing</b> é o ataque de "só ler". O efeito: capturar credenciais em protocolos sem criptografia (HTTP, FTP, Telnet, SMTP antigo).</p>
+    </div>
+    <div class="card atk">
+      <h4>3. Mapear antes de atacar</h4>
+      <p>Nenhum ataque começa sem reconhecimento: quais IPs existem, quais portas respondem, qual sistema está rodando. Isso é <b>varredura</b> (scan). O <code>ping</code> que você aprendeu hoje é a versão inocente do mesmo movimento.</p>
+    </div>
+    <div class="card atk">
+      <h4>4. Explorar a confiança entre redes</h4>
+      <p>Regra de firewall mal escrita, port forwarding esquecido, serviço interno exposto. O ataque mais comum em rede corporativa não é exótico: é entrar por onde alguém deixou aberto. Por isso o Módulo 13 é obrigatório.</p>
+    </div>
+  </div>
+  <div class="box danger">
+    <p><b>O que separa pentest de crime:</b> escopo escrito e assinado, alvo definido, data definida, e o relatório entregue. Sem isso é invasão. Você vai praticar no seu próprio laboratório (Módulo 06 e o lab de VLAN/ARP do Módulo 12) — nunca na rede do vizinho, nunca no Wi-Fi da faculdade.</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">6</span> A visão do defensor</h2>
+  <p class="goal">Para cada movimento acima existe um controle — e ele tem nome, porque você vai ver isso em edital e em entrevista.</p>
+  <table>
+    <thead><tr><th>Ataque</th><th>Controle que resolve</th><th>O que ele faz, em uma linha</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>ARP spoofing / poisoning</td>
+        <td><b>DAI</b> — Dynamic ARP Inspection ("inspeção dinâmica de ARP") + <b>DHCP snooping</b></td>
+        <td>O switch só aceita um ARP se o par IP↔MAC bater com a base de concessões do DHCP; o resto é descartado.</td>
+      </tr>
+      <tr>
+        <td>Sniffing de credenciais</td>
+        <td><b>TLS</b> em tudo + <b>802.1X</b> (autenticação de porta)</td>
+        <td>Criptografia torna o pacote capturado inútil; 802.1X impede que um dispositivo estranho entre na porta física.</td>
+      </tr>
+      <tr>
+        <td>Movimento lateral entre setores</td>
+        <td><b>Segmentação</b> com VLANs + ACL entre VLANs</td>
+        <td>Quem compromete a rede de visitantes não alcança o servidor financeiro. É o controle com melhor custo-benefício que existe.</td>
+      </tr>
+      <tr>
+        <td>Reconhecimento / varredura</td>
+        <td><b>IDS/IPS</b> + <b>NetFlow</b> + port security</td>
+        <td>Detectar 254 destinos sendo varridos em 10 segundos é fácil, se alguém estiver olhando os logs.</td>
+      </tr>
+      <tr>
+        <td>Rogue DHCP (servidor falso)</td>
+        <td><b>DHCP snooping</b> com porta confiável</td>
+        <td>Só a porta do servidor legítimo pode distribuir configuração de rede.</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="box">
+    <p><b>Ideia central de defesa em rede:</b> todo protocolo criado antes de alguém pensar em segurança assume boa-fé. ARP, DNS, DHCP e STP nasceram confiando. A defesa moderna não conserta o protocolo — ela coloca uma verificação no caminho (o switch, o firewall, o certificado).</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">7</span> Erro clássico de iniciante</h2>
+  <div class="box warn">
+    <p><b>Achar que "minha rede é invisível" porque o IP é privado.</b></p>
+    <p>Iniciante faz <code>ip a</code>, vê <code>192.168.1.37</code>, e conclui "estou escondido". Errado em dois sentidos:</p>
+    <p><b>(a)</b> Qualquer um no mesmo segmento — o Wi-Fi do café, o colega de república, um malware na máquina ao lado — te alcança diretamente. IP privado protege de estranhos <i>na internet</i>, não dos vizinhos <i>na rede</i>.<br>
+    <b>(b)</b> Seu roteador pode estar com uma porta aberta para fora agora. O IP privado não impede que alguém chegue até você por um encaminhamento esquecido.</p>
+    <p><b>O outro erro quase universal:</b> achar que <code>ping</code> que falha significa "não existe ninguém". Firewall bloqueando ICMP faz um host vivo parecer morto. Um alvo que não responde a ping pode ter 20 portas abertas.</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">8</span> Pratique agora — 3 exercícios rápidos</h2>
+  <p class="goal">Tente antes de abrir o gabarito. Leva 10 minutos e vale mais que reler a aula.</p>
+
+  <details>
+    <summary>Exercício 1 — Leitura de <code>ip a</code></summary>
+    <p>Você recebe esta saída: <code>inet 10.0.4.18/22</code>, gateway <code>10.0.4.1</code>. Responda: (a) quantos endereços utilizáveis existem neste segmento? (b) o gateway está dentro do segmento? (c) que riscos você nota ao ver um /22 numa rede de escritório?</p>
+    <p><b>Gabarito.</b> (a) <code>/22</code> = <code>2^(32-22) = 2^10 = 1024</code> endereços, menos 2 (rede e broadcast) = <b>1022 hosts</b>. (b) Sim: a rede vai de <code>10.0.4.0</code> a <code>10.0.7.255</code>, e <code>10.0.4.1</code> está dentro. (c) Um único domínio de broadcast com mais de mil máquinas: qualquer ataque de camada 2 (ARP poisoning, broadcast storm) atinge todo mundo de uma vez, e o rastreamento fica difícil. Resposta defensiva: segmentar em VLANs menores.</p>
+  </details>
+
+  <details>
+    <summary>Exercício 2 — Cálculo de faixa (mostre a conta)</summary>
+    <p>IP <code>172.16.5.200/26</code>. Qual a rede, o broadcast e a faixa de hosts utilizáveis?</p>
+    <p><b>Gabarito.</b> <code>/26</code> = 64 endereços por bloco, 62 hosts. O último octeto <code>200</code> cai no bloco que começa em <b>192</b> (192, 193, … 255). Então: rede <code>172.16.5.192</code>, broadcast <code>172.16.5.255</code>, hosts <code>172.16.5.193</code> a <code>172.16.5.254</code>. <b>Por que os erros comuns erram:</b> quem usa <code>256 − 64 = 192</code> acerta por sorte; quem tenta "de cabeça" costuma responder 172.16.5.0 – 172.16.5.63, que é o bloco anterior, porque esquece de dividir o octeto em blocos de 64.</p>
+  </details>
+
+  <details>
+    <summary>Exercício 3 — Diagnóstico</summary>
+    <p>O host A (<code>192.168.1.20</code>) não pinga o host B (<code>192.168.1.60</code>). Os dois estão no mesmo switch. Liste a ordem de checagem — do mais barato ao mais caro — e diga o que você confirmaria em cada passo.</p>
+    <p><b>Gabarito.</b> (1) <b>Placa e IP</b>: <code>ip a</code> nos dois — a interface está <code>UP</code>? os IPs estão mesmo no mesmo /24? (2) <b>Vizinho</b>: <code>arp -a</code> no A — o IP de B aparece com algum MAC? Se não aparece, o problema é camada 2 (cabo, porta do switch, VLAN diferente), não firewall. (3) <b>Gateway/rota</b>: <code>ip r</code> — se os hosts estão na mesma sub-rede, o gateway não deveria entrar no caminho; se entra, a máscara está errada. (4) <b>ICMP</b>: testar <code>ping</code> do B para o A; se funciona nos dois sentidos ou só num, é firewall local bloqueando echo request. (5) <b>Switch</b>: port security, VLAN, MAC errado na tabela. <b>Erro comum:</b> começar pelo firewall — o mais caro de checar — quando 80% desses casos mora na camada 2.</p>
+  </details>
+</section>
+
+<section>
+  <h2><span class="num">9</span> Sua trilha a 2h/semana</h2>
+  <p class="goal">Com 2 horas por semana, o realista é <b>1 módulo por semana</b> com uma semana de revisão a cada 4. Total: <b>18 semanas (~4 meses)</b> até o último módulo, com entregável semanal fixo.</p>
+  <p><b>Entregável de toda semana</b> (30 min dos seus 120): um resumo de 5 linhas escrito <i>com suas palavras</i>, 3 exercícios resolvidos e 1 captura de tráfego própria quando o tema permitir. Sem o resumo, você não aprendeu — só leu.</p>
+  <div>
+    <div class="mod"><div class="w">Sem 1</div><div class="t"><b>Módulo 01 — O que é uma rede</b> (esta aula)<span>Pacotes, encapsulamento, LAN vs WAN</span></div></div>
+    <div class="mod"><div class="w">Sem 2</div><div class="t"><b>Módulo 02 — OSI e TCP/IP</b><span>7 camadas, PDU, por que o modelo importa no ataque</span></div></div>
+    <div class="mod"><div class="w">Sem 3</div><div class="t"><b>Módulo 03 — Física e enlace</b><span>MAC, Ethernet, switch vs hub, broadcast</span></div></div>
+    <div class="mod"><div class="w">Sem 4</div><div class="t"><b>Módulo 04 — ARP e o segmento local</b><span>ARP spoofing, poisoning, DAI — seu primeiro ataque conceitual</span></div></div>
+    <div class="mod"><div class="w">Sem 5</div><div class="t"><b>Revisão + teste de nível 1</b><span>Quiz dos módulos 1–4, correção e lacunas</span></div></div>
+    <div class="mod"><div class="w">Sem 6</div><div class="t"><b>Módulo 05 — IPv4</b><span>Classes, privado vs público, máscara, gateway, CIDR</span></div></div>
+    <div class="mod"><div class="w">Sem 7–8</div><div class="t"><b>Módulo 06 — Subnetting na prática</b><span>VLSM, cálculo de rede/broadcast, exercícios com correção (é o módulo mais denso: 2 semanas)</span></div></div>
+    <div class="mod"><div class="w">Sem 9</div><div class="t"><b>Módulo 07 — IPv6</b><span>Formato, tipos, NDP, o que muda na segurança</span></div></div>
+    <div class="mod"><div class="w">Sem 10</div><div class="t"><b>Módulo 08 — TCP e UDP</b><span>Handshake, flags, portas, TCP scan vs UDP scan</span></div></div>
+    <div class="mod"><div class="w">Sem 11</div><div class="t"><b>Revisão + teste de nível 2</b><span>Quiz 5–8 com foco em subnetting e TCP</span></div></div>
+    <div class="mod"><div class="w">Sem 12</div><div class="t"><b>Módulo 09 — Roteamento</b><span>Tabela de rotas, OSPF/BGP, TTL, traceroute, ataques de rota</span></div></div>
+    <div class="mod"><div class="w">Sem 13</div><div class="t"><b>Módulo 10 — DNS</b><span>Hierarquia, registros, cache, spoofing, DNSSEC, DoH</span></div></div>
+    <div class="mod"><div class="w">Sem 14</div><div class="t"><b>Módulo 11 — DHCP</b><span>DORA, starvation, rogue DHCP, snooping</span></div></div>
+    <div class="mod"><div class="w">Sem 15</div><div class="t"><b>Módulo 12 — Camada 2 avançada</b><span>VLANs, trunk 802.1Q, VLAN hopping, STP, port security</span></div></div>
+    <div class="mod"><div class="w">Sem 16</div><div class="t"><b>Módulo 13 — NAT, firewall e proxy</b><span>Stateful vs stateless, regras, DMZ, port forwarding</span></div></div>
+    <div class="mod"><div class="w">Sem 17</div><div class="t"><b>Módulo 14 — VPN e criptografia de transporte</b><span>IPsec, WireGuard, TLS, certificados, MITM</span></div></div>
+    <div class="mod"><div class="w">Sem 18</div><div class="t"><b>Módulo 15 — Monitoramento e visibilidade</b><span>Wireshark, tcpdump, IDS/IPS, NetFlow, Zero Trust</span></div></div>
+  </div>
+  <div class="box blue">
+    <p><b>Ajuste pelo seu objetivo (pentest):</b> os módulos 04 (ARP), 08 (TCP/UDP — é a base do nmap), 10 (DNS) e 12 (VLAN/STP) são os que mais aparecem em exame prático de rede interna. Se em algum momento você tiver que cortar tempo, corte profundidade em IPv6 e VPN antes de cortar esses quatro.</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">10</span> Registro da sessão</h2>
+  <div class="metrics">
+    <div class="metric"><b>1</b><span>Módulo coberto</span></div>
+    <div class="metric"><b>3</b><span>Exercícios</span></div>
+    <div class="metric"><b>0</b><span>Quiz (modo explicação)</span></div>
+    <div class="metric"><b>25/100</b><span>Confiança estimada</span></div>
+  </div>
+  <p style="margin-top:14px;color:var(--muted);font-size:13.5px">Confiança de 25 porque esta é a primeira sessão, sem respostas suas ainda: a aula só fixa de verdade quando você erra e corrige. O próximo passo natural é o <b>Módulo 02 (OSI e TCP/IP)</b> ou, se preferir solidificar já, um <b>quiz de 10 questões</b> sobre este módulo. Nenhuma sigla desta aula fica para trás sem tradução — se alguma ficou, é falha minha: me diga qual e eu reexplico do zero.</p>
+</section>
+
+<footer>
+  Feito para estudo em laboratório próprio. Ataque e defesa descritos como mecanismo e controle, sem receita de exploração contra terceiros.<br>
+  Tutor de Redes para Cibersegurança · Sessão 1 · Nível zero · Objetivo pentest
+</footer>
+
+</div>
+</body>
+</html>
