@@ -7,7 +7,7 @@ O foco aqui não é decorar comandos ou sintaxe — é desenvolver a pergunta qu
 
 ![Status](https://img.shields.io/badge/status-em%20andamento-yellow)
 ![Trilhas](https://img.shields.io/badge/trilhas-2-blue)
-![Cyber](https://img.shields.io/badge/cyber-03%20dias-red)
+![Cyber](https://img.shields.io/badge/cyber-04%20dias-red)
 ![Dados](https://img.shields.io/badge/dados-01%20dia-blueviolet)
 ![Lab](https://img.shields.io/badge/lab-Kali%20Linux-557C94?logo=kalilinux&logoColor=white)
 
@@ -42,6 +42,7 @@ Linux, redes e segurança ofensiva (Red Team). Roadmap completo em **[`recursos/
 | [**01**](dia-01-fundamentos-linux.md) | Fundamentos do terminal Linux | `pwd` `ls` `cd` `mkdir` `touch` `man` | ✅ |
 | [**02**](dia-02-permissoes-usuarios-privilegios.md) | Permissões, usuários e privilégios | `ls -l` `chmod` `whoami` `sudo` | ✅ |
 | [**03**](dia-03-redes-reconhecimento.md) | Redes e reconhecimento de alvos | `ip a` `ip route` `nmap` | ✅ |
+| [**04**](dia-04-o-que-e-uma-rede.html) | O que é uma rede: pacotes, encapsulamento, IP × MAC | `ip a` `ip r` `ping` `arp -a` `tcpdump` | ✅ |
 
 ## 📊 Trilha 2 — Ciência de Dados
 
